@@ -1,6 +1,7 @@
 import React from "react";
 
-function Header(props) {
+function Header(props)
+{
 	return(
 		<>
 			<h1>{props.course}</h1>
@@ -8,17 +9,28 @@ function Header(props) {
 	);
 }
 
-function Content(props) {
+function Part(props)
+{
 	return(
 		<>
-			<p>{props.part1} {props.ex1}</p>
-			<p>{props.part2} {props.ex2}</p>
-			<p>{props.part3} {props.ex3}</p>
+			<p>{props.part} {props.ex}</p>
+		</>
+	)
+}
+
+function Content(props)
+{
+	return(
+		<>
+			<Part part={props.part1} ex={props.ex1} />
+			<Part part={props.part2} ex={props.ex2} />
+			<Part part={props.part3} ex={props.ex3} />
 		</>
 	);
 }
 
-function Total(props) {
+function Total(props)
+{
 	return(
 		<>
 			<p>Number of exercises {props.ex1 + props.ex2 + props.ex3}</p>
@@ -26,7 +38,8 @@ function Total(props) {
 	);
 }
 
-function App() {
+function App()
+{
 	const course = "Half Stack application development";
 	const part1 = "Fundamentals of React";
 	const exercises1 = 10;
