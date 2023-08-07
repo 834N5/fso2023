@@ -9,20 +9,16 @@ function Button({text, handleClick})
 	)
 }
 
-function NaNStats({average, positive})
-{
-	if (!isNaN(average) && !isNaN(positive))
-		return(
-			<>
-				<p>Average: {average}</p>
-				<p>Positive: {positive}%</p>
-			</>
-		)
-}
-
 function Stats({dataGood, dataNeutral, dataBad})
 {
 	const numResponses = dataGood + dataNeutral + dataBad;
+	if (numResponses === 0)
+		return(
+		<>
+			<h1>Statistics</h1>
+			<p>No feedback given</p>
+		</>
+		)
 	return(
 		<>
 			<h1>Statistics</h1>
@@ -30,10 +26,8 @@ function Stats({dataGood, dataNeutral, dataBad})
 			<p>Neutral: {dataNeutral}</p>
 			<p>Bad: {dataBad}</p>
 			<p>Total responses: {numResponses}</p>
-			<NaNStats
-				average={(dataGood + -1*dataBad)/numResponses}
-				positive={dataGood/numResponses*100}
-			/>
+			<p>Average: {(dataGood + -1*dataBad)/numResponses}</p>
+			<p>Positive: {dataGood/numResponses*100}%</p>
 		</>
 	)
 }
