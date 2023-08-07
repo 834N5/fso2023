@@ -1,7 +1,7 @@
-function Button() {
+function Button({text}) {
 	return (
 		<>
-			<button>big red button</button>
+			<button>{text}</button>
 		</>
 	)
 }
@@ -18,9 +18,9 @@ function App() {
 		<>
 			<h1>Unicafe</h1>
 			<h1>Give feedback</h1>
-			<Button />
-			<Button />
-			<Button />
+			<Button text="good"/>
+			<Button text="neutral"/>
+			<Button text="bad"/>
 			<h1>Statistics</h1>
 			<Stats />
 		</>
