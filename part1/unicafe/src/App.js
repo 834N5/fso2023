@@ -12,9 +12,10 @@ function Button({text, handleClick})
 function StatisticLine({text, value, unit})
 {
 	return(
-		<>
-			<p>{text}: {value}{unit}</p>
-		</>
+		<tr>
+			<td>{text}</td>
+			<td>{value}{unit}</td>
+		</tr>
 	)
 }
 function Stats({dataGood, dataNeutral, dataBad})
@@ -30,12 +31,14 @@ function Stats({dataGood, dataNeutral, dataBad})
 	return(
 		<>
 			<h1>Statistics</h1>
-			<StatisticLine text="Good" value={dataGood} />
-			<StatisticLine text="Neutral" value={dataNeutral} />
-			<StatisticLine text="Bad" value={dataBad} />
-			<StatisticLine text="Total responses" value={numResponses} />
-			<StatisticLine text="Average" value={(dataGood + -1*dataBad)/numResponses} />
-			<StatisticLine text="Positive" value={dataGood/numResponses*100} unit="%" />
+			<table style={{borderSpacing: "10px 0px"}}>
+				<StatisticLine text="Good" value={dataGood} />
+				<StatisticLine text="Neutral" value={dataNeutral} />
+				<StatisticLine text="Bad" value={dataBad} />
+				<StatisticLine text="Total responses" value={numResponses} />
+				<StatisticLine text="Average" value={(dataGood + -1*dataBad)/numResponses} />
+				<StatisticLine text="Positive" value={dataGood/numResponses*100} unit="%" />
+			</table>
 		</>
 	)
 }
