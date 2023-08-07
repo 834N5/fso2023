@@ -1,28 +1,48 @@
 import {useState} from "react";
 
-function Button({text, handleClick}) {
-	return (
+function Button({text, handleClick})
+{
+	return(
 		<>
 			<button onClick={handleClick}>{text}</button>
 		</>
 	)
 }
 
-function Stats({dataGood, dataNeutral, dataBad}) {
-	return (
+function NaNStats({average, positive})
+{
+	if (!isNaN(average) && !isNaN(positive))
+		return(
+			<>
+				<p>Average: {average}</p>
+				<p>Positive: {positive}%</p>
+			</>
+		)
+}
+
+function Stats({dataGood, dataNeutral, dataBad})
+{
+	const numResponses = dataGood + dataNeutral + dataBad;
+	return(
 		<>
 			<p>Good: {dataGood}</p>
 			<p>Neutral: {dataNeutral}</p>
 			<p>Bad: {dataBad}</p>
+			<p>Total responses: {numResponses}</p>
+			<NaNStats
+				average={(dataGood + -1*dataBad)/numResponses}
+				positive={dataGood/numResponses*100}
+			/>
 		</>
 	)
 }
-function App() {
+function App()
+{
 	const [good, setGood] = useState(0);
 	const [neutral, setNeutral] = useState(0);
 	const [bad, setBad] = useState(0);
 
-	return (
+	return(
 		<>
 			<h1>Unicafe</h1>
 
