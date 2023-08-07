@@ -11,7 +11,6 @@ function Button({text, handleClick}) {
 function Stats({dataGood, dataNeutral, dataBad}) {
 	return (
 		<>
-			<p>something something stats</p>
 			<p>Good: {dataGood}</p>
 			<p>Neutral: {dataNeutral}</p>
 			<p>Bad: {dataBad}</p>
