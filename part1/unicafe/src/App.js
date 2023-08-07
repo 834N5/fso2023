@@ -25,6 +25,7 @@ function Stats({dataGood, dataNeutral, dataBad})
 	const numResponses = dataGood + dataNeutral + dataBad;
 	return(
 		<>
+			<h1>Statistics</h1>
 			<p>Good: {dataGood}</p>
 			<p>Neutral: {dataNeutral}</p>
 			<p>Bad: {dataBad}</p>
@@ -51,7 +52,6 @@ function App()
 			<Button text="neutral" handleClick={() => setNeutral(neutral+1)} />
 			<Button text="bad" handleClick={() => setBad(bad+1)} />
 
-			<h1>Statistics</h1>
 			<Stats dataGood={good} dataNeutral={neutral} dataBad={bad} />
 		</>
 	)
