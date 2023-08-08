@@ -1,5 +1,3 @@
-//import React from "react";
-
 function Header(props)
 {
 	return(
@@ -15,7 +13,7 @@ function Part(props)
 		<>
 			<p>{props.part} {props.ex}</p>
 		</>
-	)
+	);
 }
 
 function Content(props)
@@ -33,7 +31,7 @@ function Total(props)
 {
 	let sum = 0;
 	for (let i = 0; i < 3; ++i)
-		sum += props.course.parts[i].exercises
+		sum += props.course.parts[i].exercises;
 	return(
 		<>
 			<p>Number of exercises {sum}</p>
@@ -59,7 +57,7 @@ function App()
 				exercises: 14
 			}
 		]
-	}
+	};
 
 	return(
 		<>

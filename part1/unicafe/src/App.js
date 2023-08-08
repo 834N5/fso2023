@@ -6,7 +6,7 @@ function Button({text, handleClick})
 		<>
 			<button onClick={handleClick}>{text}</button>
 		</>
-	)
+	);
 }
 
 function StatisticLine({text, value, unit})
@@ -16,7 +16,7 @@ function StatisticLine({text, value, unit})
 			<td>{text}</td>
 			<td>{value}{unit}</td>
 		</tr>
-	)
+	);
 }
 function Stats({dataGood, dataNeutral, dataBad})
 {
@@ -27,7 +27,7 @@ function Stats({dataGood, dataNeutral, dataBad})
 			<h1>Statistics</h1>
 			<p>No feedback given</p>
 		</>
-		)
+		);
 	return(
 		<>
 			<h1>Statistics</h1>
@@ -40,7 +40,7 @@ function Stats({dataGood, dataNeutral, dataBad})
 				<StatisticLine text="Positive" value={dataGood/numResponses*100} unit="%" />
 			</table>
 		</>
-	)
+	);
 }
 function App()
 {
@@ -59,7 +59,7 @@ function App()
 
 			<Stats dataGood={good} dataNeutral={neutral} dataBad={bad} />
 		</>
-	)
+	);
 }
 
 export default App;
