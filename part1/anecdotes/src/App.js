@@ -1,5 +1,14 @@
 import { useState } from "react"
 
+function Anecdote({anecdote, votes}) {
+	return(
+	  	<>
+	  		<p>{anecdote}</p>
+	  		<p>Has {votes} votes</p>
+	  	</>
+	);
+}
+
 function Button({text, handleClick}) {
 	return(
 		<>
@@ -29,18 +38,25 @@ function App() {
 		while((rand=Math.floor(Math.random()*anecdotes.length)) == selected);
 		setSelected(rand);
 	}
+
 	function vote() {
 		let votesCopy = [...votes];
 		++votesCopy[selected];
 		setVotes(votesCopy);
 	}
 
+	const topAnecdote = () => votes.indexOf(Math.max(...votes));
+
 	return(
 	  	<>
-	  		<h1>{anecdotes[selected]}</h1>
-	  		<p>Has {votes[selected]} votes</p>
+	  		<h1>Anecdote of the day</h1>
+	  		<Anecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
+
 	  		<Button text="Vote" handleClick={vote} />
 	  		<Button text="Next Anecdote" handleClick={selectRandom} />
+
+	  		<h1>Most voted anecdote</h1>
+	  		<Anecdote anecdote={anecdotes[topAnecdote()]} votes={votes[topAnecdote()]}/>
 	  	</>
 	);
 }
