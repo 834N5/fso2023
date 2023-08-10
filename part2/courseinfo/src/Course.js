@@ -1,32 +1,33 @@
-function Header(props)
+function Header({course})
 {
 	return(
 		<>
-			<h1>{props.course.name}</h1>
+			<h1>{course.name}</h1>
 		</>
 	);
 }
 
-function Part(props)
+function Part({name, exercises})
 {
 	return(
 		<>
-			<p>{props.part} {props.ex}</p>
+			<p>{name} {exercises}</p>
 		</>
 	);
 }
 
-function Content(props)
+function Content({course})
 {
 	return(
 		<>
-			<Part part={props.course.parts[0].name} ex={props.course.parts[0].exercises} />
-			<Part part={props.course.parts[1].name} ex={props.course.parts[1].exercises} />
-			<Part part={props.course.parts[2].name} ex={props.course.parts[2].exercises} />
+			{course.parts.map(parts =>
+				<Part key={parts.id} name={parts.name} exercises={parts.exercises} />
+			)}
 		</>
 	);
 }
 
+/* not functional */
 function Total(props)
 {
 	let sum = 0;
@@ -45,7 +46,6 @@ function Course({course})
 		<>
 			<Header course={course} />
 			<Content course={course} />
-			<Total course={course} />
 		</>
 	);
 }
