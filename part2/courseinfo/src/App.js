@@ -17,6 +17,11 @@ function App()
 				id: 2
 			},
 			{
+				name: "Using props to pass data",
+				exercises: 11,
+				id: 4
+			},
+			{
 				name: "State of a component",
 				exercises: 14,
 				id: 3

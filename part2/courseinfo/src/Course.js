@@ -28,11 +28,12 @@ function Content({course})
 }
 
 /* not functional */
-function Total(props)
+function Total({course})
 {
-	let sum = 0;
-	for (let i = 0; i < 3; ++i)
-		sum += props.course.parts[i].exercises;
+	let sum = course.parts.map(parts =>
+		parts.exercises).reduce(
+			(accumulator, currentValue) =>
+				accumulator + currentValue, 0);
 	return(
 		<>
 			<p>Number of exercises {sum}</p>
@@ -46,6 +47,7 @@ function Course({course})
 		<>
 			<Header course={course} />
 			<Content course={course} />
+			<Total course={course} />
 		</>
 	);
 }
