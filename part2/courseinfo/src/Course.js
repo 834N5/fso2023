@@ -27,13 +27,9 @@ function Content({course})
 	);
 }
 
-/* not functional */
 function Total({course})
 {
-	let sum = course.parts.map(parts =>
-		parts.exercises).reduce(
-			(accumulator, currentValue) =>
-				accumulator + currentValue, 0);
+	let sum = course.parts.reduce((s, p) => s + p.exercises, 0);
 	return(
 		<>
 			<p>Number of exercises {sum}</p>
