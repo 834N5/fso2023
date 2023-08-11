@@ -39,18 +39,11 @@ function Total({course})
 
 function Course({course})
 {
-	/* Use <Fragment> instead of <> if you want to use a key */
 	return(
 		<>
-			{course.map(courses => {
-				return(
-					<div key={courses.id}>
-						<Header course={courses} />
-						<Content course={courses} />
-						<Total course={courses} />
-					</div>
-				)
-			})}
+			<Header course={course} />
+			<Content course={course} />
+			<Total course={course} />
 		</>
 	);
 }
