@@ -20,6 +20,10 @@ function App()
 	function addName(event)
 	{
 		event.preventDefault()
+		if (persons.some((person) => person.name === newName)) {
+			alert(`${newName} has already been added to the phonebook.`);
+			return;
+		}
 		setPersons(persons.concat({name: newName, id: persons.length}));
 	}
 	function handleNameChange(event)
