@@ -15,16 +15,19 @@ function App()
 	const [persons, setPersons] = useState([
 		{name: "Arto Hellas", id: 0}
 	]);
-	const [newName, setNewName] = useState("wow");
+	const [newName, setNewName] = useState("");
 
 	function addName(event)
 	{
 		event.preventDefault()
-		if (persons.some((person) => person.name === newName)) {
-			alert(`${newName} has already been added to the phonebook.`);
-			return;
-		}
-		setPersons(persons.concat({name: newName, id: persons.length}));
+		let name = newName.trim()
+		setNewName(name);
+		if (!name)
+			alert("Name must not be empty");
+		else if (persons.some((person) => person.name === name.trim()))
+			alert(`${name} has already been added to the phonebook.`);
+		else
+			setPersons(persons.concat({name: name.trim(), id: persons.length}));
 	}
 	function handleNameChange(event)
 	{
