@@ -26,8 +26,10 @@ function App()
 			alert("Name must not be empty");
 		else if (persons.some((person) => person.name === name.trim()))
 			alert(`${name} has already been added to the phonebook.`);
-		else
+		else {
 			setPersons(persons.concat({name: name.trim(), id: persons.length}));
+			setNewName("");
+		}
 	}
 	function handleNameChange(event)
 	{
