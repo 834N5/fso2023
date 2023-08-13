@@ -1,17 +1,8 @@
-import {useState} from "react"
+import {useState} from "react";
+import People from "./People";
+import PhonebookForm from "./PhonebookForm";
+import Search from "./Search";
 
-function People({people, search})
-{
-	return(
-		<>
-			{people.map(people => {
-				if (people.name.toLowerCase().includes(search.toLowerCase()))
-					return(<p key={people.id}>{people.name} {people.number}</p>)
-				}
-			)}
-		</>
-	);
-}
 function App()
 {
 	const [persons, setPersons] = useState([
@@ -60,21 +51,15 @@ function App()
 	return(
 		<>
 			<h1>Phonebook</h1>
-			<div>
-				Search for name: <input value={search} onChange={handleSearchChange} />
-			</div>
+			<Search search={search} onChange={handleSearchChange}/>
 			<h1>Add new number</h1>
-			<form onSubmit={addNumber}>
-				<div>
-					name: <input value={newName} onChange={handleNameChange} />
-				</div>
-				<div>
-					number: <input value={newNumber} onChange={handleNumberChange} />
-				</div>
-				<div>
-					<button type="submit">add</button>
-				</div>
-			</form>
+			<PhonebookForm
+				onSubmit={addNumber}
+				name={newName}
+				onNameChange={handleNameChange}
+				number={newNumber}
+				onNumberChange={handleNumberChange}
+			/>
 			<h1>Numbers</h1>
 			<People people={persons} search={search} />
 		</>
