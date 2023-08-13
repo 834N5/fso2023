@@ -1,11 +1,13 @@
 import {useState} from "react"
 
-function People({people})
+function People({people, search})
 {
 	return(
 		<>
-			{people.map(people =>
-				<p key={people.id}>{people.name} {people.number}</p>
+			{people.map(people => {
+				if (people.name.toLowerCase().includes(search.toLowerCase()))
+					return(<p key={people.id}>{people.name} {people.number}</p>)
+				}
 			)}
 		</>
 	);
@@ -17,12 +19,13 @@ function App()
 	]);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
+	const [search, setSearch] = useState("");
 
 	function addNumber(event)
 	{
-		event.preventDefault()
-		let name = newName.trim()
-		let number = newNumber.trim()
+		event.preventDefault();
+		let name = newName.trim();
+		let number = newNumber.trim();
 		setNewName(name);
 		setNewNumber(number);
 		if (!name)
@@ -39,6 +42,7 @@ function App()
 			setNewNumber("");
 		}
 	}
+
 	function handleNameChange(event)
 	{
 		setNewName(event.target.value);
@@ -47,10 +51,19 @@ function App()
 	{
 		setNewNumber(event.target.value);
 	}
+	function handleSearchChange(event)
+	{
+		setSearch(event.target.value);
+	}
+
 
 	return(
 		<>
 			<h1>Phonebook</h1>
+			<div>
+				Search for name: <input value={search} onChange={handleSearchChange} />
+			</div>
+			<h1>Add new number</h1>
 			<form onSubmit={addNumber}>
 				<div>
 					name: <input value={newName} onChange={handleNameChange} />
@@ -63,7 +76,7 @@ function App()
 				</div>
 			</form>
 			<h1>Numbers</h1>
-			<People people={persons} />
+			<People people={persons} search={search} />
 		</>
 	);
 }
