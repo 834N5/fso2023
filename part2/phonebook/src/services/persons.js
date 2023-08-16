@@ -16,4 +16,5 @@ function add(personsObj)
 	);
 }
 
-export default {getAll, add};
+const personsServices = {getAll, add};
+export default personsServices;
