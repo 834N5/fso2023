@@ -14,6 +14,15 @@ function App()
 	const [newNumber, setNewNumber] = useState("");
 	const [search, setSearch] = useState("");
 
+	function removePersons(id, name)
+	{
+		if (window.confirm(`Delete ${name}?`)) {
+			personsService.remove(id)
+			.then(response => console.log(response))
+			.catch(response => alert(`${name} has already been deleted`));
+		}
+	}
+
 	function addNumber(event)
 	{
 		event.preventDefault();
@@ -67,7 +76,7 @@ function App()
 				onNumberChange={handleNumberChange}
 			/>
 			<h1>Numbers</h1>
-			<People people={persons} search={search} />
+			<People people={persons} search={search} remove={removePersons} />
 		</>
 	);
 }

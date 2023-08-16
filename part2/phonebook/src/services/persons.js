@@ -16,5 +16,12 @@ function add(personsObj)
 	);
 }
 
-const personsServices = {getAll, add};
+function remove(id)
+{
+	return(
+		axios.delete(`${url}/${id}`)
+	);
+}
+
+const personsServices = {getAll, add, remove};
 export default personsServices;

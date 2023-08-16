@@ -1,11 +1,17 @@
-function People({people, search})
+function People({people, search, remove})
 {
 	return(
 		<>
 			{people.filter(people =>
 				people.name.toLowerCase().includes(search.toLowerCase())
 			).map(people =>
-				<p key={people.id}>{people.name} {people.number}</p>
+				<div key={people.id}>
+					{people.name} {people.number}
+					<button onClick={() =>
+						remove(people.id, people.name)}>
+						delete
+					</button>
+				</div>
 			)}
 		</>
 	);
