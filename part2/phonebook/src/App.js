@@ -35,8 +35,7 @@ function App()
 			alert(`The number: ${personsObj.number} has already been used.`);
 		else {
 			axios.post("http://localhost:3001/persons", personsObj)
-			.then(response => console.log(response));
-			setPersons(persons.concat(personsObj));
+			.then(response => setPersons(persons.concat(response.data)));
 			setNewName("");
 			setNewNumber("");
 		}
