@@ -8,7 +8,7 @@ function App()
 {
 	const [persons, setPersons] = useState([]);
 	useEffect(() => {
-		axios.get('http://localhost:3001/persons')
+		axios.get("http://localhost:3001/persons")
 		.then(response => setPersons(response.data))
 	}, []);
 	const [newName, setNewName] = useState("");
@@ -18,20 +18,25 @@ function App()
 	function addNumber(event)
 	{
 		event.preventDefault();
-		let name = newName.trim();
-		let number = newNumber.trim();
-		setNewName(name);
-		setNewNumber(number);
-		if (!name)
+		let personsObj = {
+			name: newName.trim(),
+			number: newNumber.trim(),
+			id: persons.length
+		}
+		setNewName(personsObj.name);
+		setNewNumber(personsObj.number);
+		if (!personsObj.name)
 			alert("Name must not be empty");
-		else if (!number)
+		else if (!personsObj.number)
 			alert("Number must not be empty");
-		else if (persons.some((person) => person.name === name))
-			alert(`${name} has already been added to the phonebook.`);
-		else if (persons.some((person) => person.number === number))
-			alert(`The number: ${number} has already been used.`);
+		else if (persons.some((person) => person.name === personsObj.name))
+			alert(`${personsObj.name} has already been added to the phonebook.`);
+		else if (persons.some((person) => person.number === personsObj.number))
+			alert(`The number: ${personsObj.number} has already been used.`);
 		else {
-			setPersons(persons.concat({name: name, number: number, id: persons.length}));
+			axios.post("http://localhost:3001/persons", personsObj)
+			.then(response => console.log(response));
+			setPersons(persons.concat(personsObj));
 			setNewName("");
 			setNewNumber("");
 		}
