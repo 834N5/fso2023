@@ -19,10 +19,7 @@ function App()
 	{
 		if (window.confirm(`Delete ${name}?`)) {
 			personsService.remove(id)
-			.then(() =>
-				setPersons(persons.filter(person =>
-					person.id !== id))
-			)
+			.then(() => setPersons(persons.filter(person => person.id !== id)))
 			.catch(() => alert(`${name} could not be deleted`));
 		}
 	}
