@@ -9,6 +9,7 @@ function App()
 	const [persons, setPersons] = useState([]);
 	useEffect(() => {
 		personsService.getAll().then(response => setPersons(response))
+			.catch(() => alert("Database was unable to be reached"));
 	}, []);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
@@ -18,8 +19,11 @@ function App()
 	{
 		if (window.confirm(`Delete ${name}?`)) {
 			personsService.remove(id)
-			.then(response => console.log(response))
-			.catch(response => alert(`${name} has already been deleted`));
+			.then(() =>
+				setPersons(persons.filter(person =>
+					person.id !== id))
+			)
+			.catch(() => alert(`${name} could not be deleted`));
 		}
 	}
 
@@ -43,9 +47,12 @@ function App()
 			alert(`The number: ${personsObj.number} has already been used.`);
 		else {
 			personsService.add(personsObj)
-			.then(response => setPersons(persons.concat(response)));
-			setNewName("");
-			setNewNumber("");
+			.then(response => {
+				setPersons(persons.concat(response));
+				setNewName("");
+				setNewNumber("");
+			})
+			.catch(() => alert("Name was unable to be added"));
 		}
 	}
 
