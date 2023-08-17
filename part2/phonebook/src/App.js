@@ -27,6 +27,9 @@ function App()
 	function addNumber(event)
 	{
 		event.preventDefault();
+		let id = 0;
+		// find smallest missing positive int
+
 		let personsObj = {
 			name: newName.trim(),
 			number: newNumber.trim(),
