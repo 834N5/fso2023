@@ -27,13 +27,11 @@ function App()
 	function addNumber(event)
 	{
 		event.preventDefault();
-		let id = 0;
-		// find smallest missing positive int
-
+		/* id automatically allocated my json-server */
 		let personsObj = {
 			name: newName.trim(),
 			number: newNumber.trim(),
-			id: persons.length
+			id: 0
 		}
 		setNewName(personsObj.name);
 		setNewNumber(personsObj.number);
