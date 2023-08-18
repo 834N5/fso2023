@@ -23,5 +23,13 @@ function remove(id)
 	);
 }
 
-const personsServices = {getAll, add, remove};
+function change(personsObj, id)
+{
+	return(
+		axios.put(`${url}/${id}`, personsObj)
+			.then(response => response.data)
+	);
+}
+
+const personsServices = {getAll, add, remove, change};
 export default personsServices;

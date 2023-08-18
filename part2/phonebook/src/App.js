@@ -42,13 +42,11 @@ function App()
 			if (window.confirm(`${personsObj.name} has already been added to the phonebook.\nWould you like to replace the phone number?`)) {
 				let id = persons.find(person => person.name === personsObj.name).id;
 				console.log(`something something ${id}`);
-				/*
 				personsService.change(personsObj, id).then(response =>
-					setPersons(person.map(person => {
+					setPersons(persons.map(person =>
 						person.id === response.id ? response : person)
-					})
+					)
 				);
-				*/
 			}
 		}
 		else if (persons.some((person) => person.number === personsObj.number))
