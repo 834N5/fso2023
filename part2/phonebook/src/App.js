@@ -27,11 +27,10 @@ function App()
 	function addNumber(event)
 	{
 		event.preventDefault();
-		/* id automatically allocated my json-server */
+		/* id automatically allocated by json-server */
 		let personsObj = {
 			name: newName.trim(),
 			number: newNumber.trim(),
-			id: 0
 		}
 		setNewName(personsObj.name);
 		setNewNumber(personsObj.number);
