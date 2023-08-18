@@ -38,8 +38,19 @@ function App()
 			alert("Name must not be empty");
 		else if (!personsObj.number)
 			alert("Number must not be empty");
-		else if (persons.some((person) => person.name === personsObj.name))
-			alert(`${personsObj.name} has already been added to the phonebook.`);
+		else if (persons.some((person) => person.name === personsObj.name)) {
+			if (window.confirm(`${personsObj.name} has already been added to the phonebook.\nWould you like to replace the phone number?`)) {
+				let id = persons.find(person => person.name === personsObj.name).id;
+				console.log(`something something ${id}`);
+				/*
+				personsService.change(personsObj, id).then(response =>
+					setPersons(person.map(person => {
+						person.id === response.id ? response : person)
+					})
+				);
+				*/
+			}
+		}
 		else if (persons.some((person) => person.number === personsObj.number))
 			alert(`The number: ${personsObj.number} has already been used.`);
 		else {
