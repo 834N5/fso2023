@@ -1,8 +1,9 @@
 import {useState, useEffect} from "react";
 import personsService from "./services/persons";
-import People from "./People";
-import PhonebookForm from "./PhonebookForm";
+import Notification from "./Notification";
 import Search from "./Search";
+import PhonebookForm from "./PhonebookForm";
+import People from "./People";
 
 function App()
 {
@@ -14,6 +15,7 @@ function App()
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [search, setSearch] = useState("");
+	const [message, setMessage] = useState(null);
 
 	function removePersons(id, name)
 	{
@@ -38,19 +40,29 @@ function App()
 			alert("Name must not be empty");
 		else if (!personsObj.number)
 			alert("Number must not be empty");
+		else if (persons.some((person) => person.number === personsObj.number))
+			alert(`The number: ${personsObj.number} has already been used.`);
+		/* Edit number */
 		else if (persons.some((person) => person.name === personsObj.name)) {
 			if (window.confirm(`${personsObj.name} has already been added to the phonebook.\nWould you like to replace the phone number?`)) {
 				let id = persons.find(person => person.name === personsObj.name).id;
-				console.log(`something something ${id}`);
-				personsService.change(personsObj, id).then(response =>
+				personsService.change(personsObj, id).then(response => {
 					setPersons(persons.map(person =>
 						person.id === response.id ? response : person)
-					)
-				);
+					);
+					setNewName("");
+					setNewNumber("");
+					setMessage(`${response.name} has been edited.`);
+					console.log("ok");
+					setTimeout(() => setMessage(null), 5000);
+					/* TODO
+					 * use a FIFO queue to add and remove messages
+					 * use .map in Notification.js to render an array
+					 * of objects including the message and type (success, error)
+					 */
+				});
 			}
 		}
-		else if (persons.some((person) => person.number === personsObj.number))
-			alert(`The number: ${personsObj.number} has already been used.`);
 		else {
 			personsService.add(personsObj)
 			.then(response => {
@@ -79,7 +91,8 @@ function App()
 	return(
 		<>
 			<h1>Phonebook</h1>
-			<Search search={search} onChange={handleSearchChange}/>
+			<Notification message={message} />
+			<Search search={search} onChange={handleSearchChange} />
 			<h1>Add new number</h1>
 			<PhonebookForm
 				onSubmit={addNumber}
