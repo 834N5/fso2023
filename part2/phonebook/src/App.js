@@ -8,21 +8,40 @@ import People from "./People";
 function App()
 {
 	const [persons, setPersons] = useState([]);
-	useEffect(() => {
-		personsService.getAll().then(response => setPersons(response))
-			.catch(() => alert("Database was unable to be reached"));
-	}, []);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [search, setSearch] = useState("");
-	const [message, setMessage] = useState(null);
+	const [messages, setMessages] = useState([]);
+
+	/* Something I learnt
+	 * passing a function to setTHING will get the latest THING
+	 * Referencing THING directly in setTimeout didn't get the latest.
+	 * using a function is more reliable from my testing
+	 *
+	 * This happens because setTimeout makes a closure over THING
+	 * One way to avoid this issue is to use useRef to hold the value of THING
+	 */
+	/* TODO
+	 * Add an algorithm to add the smallest missing positive (for a key)
+	 */
+	function addMessage(message, type, timeout = 5000)
+	{
+		setMessages(messages => [...messages, {message, type}]);
+		if (timeout)
+			setTimeout(() => setMessages(messages => messages.slice(1)), timeout)
+	}
+
+	useEffect(() => {
+		personsService.getAll().then(response => setPersons(response))
+			.catch(() => addMessage("Database was unable to be reached", "error", 0));
+	}, []);
 
 	function removePersons(id, name)
 	{
 		if (window.confirm(`Delete ${name}?`)) {
 			personsService.remove(id)
 			.then(() => setPersons(persons.filter(person => person.id !== id)))
-			.catch(() => alert(`${name} could not be deleted`));
+			.catch(() => addMessage(`${name} could not be deleted`, "error"));
 		}
 	}
 
@@ -37,11 +56,11 @@ function App()
 		setNewName(personsObj.name);
 		setNewNumber(personsObj.number);
 		if (!personsObj.name)
-			alert("Name must not be empty");
+			addMessage("Name must not be empty", "error");
 		else if (!personsObj.number)
-			alert("Number must not be empty");
+			addMessage("Number must not be empty", "error");
 		else if (persons.some((person) => person.number === personsObj.number))
-			alert(`The number: ${personsObj.number} has already been used.`);
+			addMessage(`The number: ${personsObj.number} has already been used.`, "error");
 		/* Edit number */
 		else if (persons.some((person) => person.name === personsObj.name)) {
 			if (window.confirm(`${personsObj.name} has already been added to the phonebook.\nWould you like to replace the phone number?`)) {
@@ -52,14 +71,7 @@ function App()
 					);
 					setNewName("");
 					setNewNumber("");
-					setMessage(`${response.name} has been edited.`);
-					console.log("ok");
-					setTimeout(() => setMessage(null), 5000);
-					/* TODO
-					 * use a FIFO queue to add and remove messages
-					 * use .map in Notification.js to render an array
-					 * of objects including the message and type (success, error)
-					 */
+					addMessage(`${response.name} has been edited.`, "success");
 				});
 			}
 		}
@@ -69,8 +81,11 @@ function App()
 				setPersons(persons.concat(response));
 				setNewName("");
 				setNewNumber("");
+				addMessage(`${response.name} has been added.`, "success");
 			})
-			.catch(() => alert("Name was unable to be added"));
+			.catch(() => {
+				addMessage("Name was unable to be added", "error");
+			});
 		}
 	}
 
@@ -91,7 +106,7 @@ function App()
 	return(
 		<>
 			<h1>Phonebook</h1>
-			<Notification message={message} />
+			<Notification messages={messages} />
 			<Search search={search} onChange={handleSearchChange} />
 			<h1>Add new number</h1>
 			<PhonebookForm
