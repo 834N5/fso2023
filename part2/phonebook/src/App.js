@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import personsService from "./services/persons";
 import Notification from "./Notification";
 import Search from "./Search";
@@ -12,21 +12,34 @@ function App()
 	const [newNumber, setNewNumber] = useState("");
 	const [search, setSearch] = useState("");
 	const [messages, setMessages] = useState([]);
+	const messagesRef = useRef(messages);
+	messagesRef.current = messages;
 
-	/* Something I learnt
+	/* Some things I learnt
 	 * passing a function to setTHING will get the latest THING
 	 * Referencing THING directly in setTimeout didn't get the latest.
 	 * using a function is more reliable from my testing
 	 *
 	 * This happens because setTimeout makes a closure over THING
 	 * One way to avoid this issue is to use useRef to hold the value of THING
-	 */
-	/* TODO
-	 * Add an algorithm to add the smallest missing positive (for a key)
+	 * I had to use messagesRef in the function. When I waited for the
+	 * previous messages to delete before submitting window.confirm,
+	 * messages would be in the previous state of messages of when the add button was pressed.
+	 * I'm not too sure why.
 	 */
 	function addMessage(message, type, timeout = 5000)
 	{
-		setMessages(messages => [...messages, {message, type}]);
+		/* Get lowest missing positive int */
+		let keys = (messagesRef.current.map(messages => messages.key));
+		let key = 0;
+		for (let i = 0; i < keys.length; ++i)
+			while(keys[i] < keys.length && keys[i] !== i)
+				[ keys[keys[i]], keys[i] ] = [ keys[i], keys[keys[i]] ];
+		for (key = 0; key < keys.length; ++key)
+			if (keys[key] !== key)
+				break;
+
+		setMessages(messages => [...messages, {message, type, key}]);
 		if (timeout)
 			setTimeout(() => setMessages(messages => messages.slice(1)), timeout)
 	}
