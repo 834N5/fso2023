@@ -1,0 +1,6 @@
+json-server and vite uses localhost instead of 127.0.0.1 or 0.0.0.0
+localhost is converted to an ipv6 address ([::1]:port) instead of an ipv4
+firefox resolves localhost to 127.0.0.1 only
+chrome resolves localhost to 127.0.0.1 and ::1
+
+https://github.com/vitejs/vite/issues/12583#issuecomment-1484099103
