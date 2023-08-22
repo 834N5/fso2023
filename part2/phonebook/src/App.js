@@ -85,7 +85,8 @@ function App()
 					setNewName("");
 					setNewNumber("");
 					addMessage(`${response.name} has been edited.`, "success");
-				});
+				})
+					.catch(() => addMessage(`${personsObj.name} could not be edited`, "error"));
 			}
 		}
 		else {
