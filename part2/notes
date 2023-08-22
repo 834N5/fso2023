@@ -4,3 +4,4 @@ firefox resolves localhost to 127.0.0.1 only
 chrome resolves localhost to 127.0.0.1 and ::1
 
 https://github.com/vitejs/vite/issues/12583#issuecomment-1484099103
+https://github.com/nodejs/node/issues/40537
