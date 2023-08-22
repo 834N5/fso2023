@@ -11,6 +11,8 @@ function Results({countries, query}) {
 	);
 	if (countryResults.length > 10)
 		return(<p>Too many matches, please make your query more specific.</p>);
+	if (countryResults.length === 1)
+		return(<h1>{countryResults[0].name.official}</h1>);
 
 	return(
 		<>
