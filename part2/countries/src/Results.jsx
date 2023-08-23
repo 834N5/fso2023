@@ -1,8 +1,9 @@
-import {useState} from "react";
+import {useState, useRef} from "react";
 import weatherServices from "./services/weather.js";
 
 function Results({countries, query, detail, setDetail}) {
 	const [weather, setWeather] = useState(null);
+	const weatherCountry = useRef(null);
 
 	if (!countries)
 		return(<p>Getting data from server...</p>);
@@ -22,12 +23,17 @@ function Results({countries, query, detail, setDetail}) {
 		return(<p>Too many matches, please make your query more specific.</p>);
 
 	if (countryResults.length === 1) {
-		weatherServices.getWeather(countryResults[0].name.common)
-			.then(response => setWeather(response))
-			.catch(() => setWeather("Couldn't fetch weather"));
+		if (countryResults[0].name.common != weatherCountry.current) {
+			weatherCountry.current = countryResults[0].name.common
+			setWeather(null);
+			weatherServices.getWeather(weatherCountry.current)
+				.then(response => setWeather(response))
+				.catch(() => setWeather("Couldn't fetch weather"));
+		}
+		console.log(weather);
 		return(
 			<>
-				<button onClick={() => {setDetail(null); setWeather(null)}}>Back</button>
+				<button onClick={() => setDetail(null)}>Back</button>
 				<h1>{countryResults[0].name.common}</h1>
 				<h2>Official name: {countryResults[0].name.official}</h2>
 				<h3>Population: </h3>
