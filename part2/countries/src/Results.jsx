@@ -28,7 +28,10 @@ function Results({countries, query, detail, setDetail}) {
 			setWeather(null);
 			weatherServices.getWeather(weatherCountry.current)
 				.then(response => setWeather(response))
-				.catch(() => setWeather("Couldn't fetch weather"));
+				.catch(() => {
+					setWeather("Couldn't fetch weather");
+					weatherCountry.current = null;
+				});
 		}
 		console.log(weather);
 		return(
