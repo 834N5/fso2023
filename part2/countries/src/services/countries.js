@@ -8,10 +8,6 @@ function getAll()
 		axios.get(`${url}all`).then(response => response.data)
 	);
 }
-function getCountry(country)
-{
-		console.log("TODO");
-}
 
-const countryServices = {getAll, getCountry};
+const countryServices = {getAll};
 export default countryServices;
