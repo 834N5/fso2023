@@ -1,4 +1,9 @@
+import {useState} from "react";
+import weatherServices from "./services/weather.js";
+
 function Results({countries, query, detail, setDetail}) {
+	const [weather, setWeather] = useState(null);
+
 	if (!countries)
 		return(<p>Getting data from server...</p>);
 
@@ -17,9 +22,12 @@ function Results({countries, query, detail, setDetail}) {
 		return(<p>Too many matches, please make your query more specific.</p>);
 
 	if (countryResults.length === 1) {
+		weatherServices.getWeather(countryResults[0].name.common)
+			.then(response => setWeather(response))
+			.catch(() => setWeather("Couldn't fetch weather"));
 		return(
 			<>
-				<button onClick={() => setDetail(null)}>Back</button>
+				<button onClick={() => {setDetail(null); setWeather(null)}}>Back</button>
 				<h1>{countryResults[0].name.common}</h1>
 				<h2>Official name: {countryResults[0].name.official}</h2>
 				<h3>Population: </h3>
@@ -40,6 +48,8 @@ function Results({countries, query, detail, setDetail}) {
 				<img src={countryResults[0].flags.png}
 				     alt={`${countryResults[0].name.common} flag`}
 				/>
+				<h2>Weather</h2>
+				{weather ? <pre>{weather}</pre> : <p>Fetching Weather...</p>}
 			</>
 		);
 	}
