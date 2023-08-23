@@ -30,13 +30,16 @@ function Results({countries, query, detail, setDetail}) {
 				.then(response => setWeather(response))
 				.catch(() => {
 					setWeather("Couldn't fetch weather");
-					weatherCountry.current = null;
 				});
 		}
 		console.log(weather);
 		return(
 			<>
-				<button onClick={() => setDetail(null)}>Back</button>
+				<button onClick={() => {
+					setDetail(null)
+					if (weather === "Couldn't fetch weather")
+						weatherCountry.current = null;
+				}}>Back</button>
 				<h1>{countryResults[0].name.common}</h1>
 				<h2>Official name: {countryResults[0].name.official}</h2>
 				<h3>Population: </h3>
