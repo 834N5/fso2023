@@ -1,4 +1,4 @@
-import {useEffect, useState, useRef} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import countryServices from "./services/countries.js";
 import Results from "./Results.jsx";
