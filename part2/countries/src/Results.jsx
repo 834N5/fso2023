@@ -1,20 +1,25 @@
-function Results({countries, query}) {
+function Results({countries, query, detail, setDetail}) {
 	if (!countries)
 		return(<p>Getting data from server...</p>);
 
 	if (!query)
 		return(<p>Search for a country!</p>);
 
-	const countryResults = countries.filter((country, index) =>
-		country.name.common.toLowerCase().includes(query) ||
-		country.name.official.toLowerCase().includes(query)
-	);
-	if (countryResults.length > 10)
+	const filter = detail ?
+		country => country.name.common === detail :
+		country =>
+			country.name.common.toLowerCase().includes(query.toLowerCase()) ||
+			country.name.official.toLowerCase().includes(query.toLowerCase())
+
+	const countryResults = countries.filter((country, index) => filter(country));
+
+	if (!detail && countryResults.length > 10)
 		return(<p>Too many matches, please make your query more specific.</p>);
 
-	if (countryResults.length === 1)
+	if (countryResults.length === 1) {
 		return(
 			<>
+				<button onClick={() => setDetail(null)}>Back</button>
 				<h1>{countryResults[0].name.common}</h1>
 				<h2>Official name: {countryResults[0].name.official}</h2>
 				<h3>Population: </h3>
@@ -37,10 +42,16 @@ function Results({countries, query}) {
 				/>
 			</>
 		);
+	}
 
 	return(
 		<>
-			{countryResults.map((country, index) => <p key={index}>{country.name.common}</p>)}
+			{countryResults.map((country, index) =>
+				<div key={index}>
+					{country.name.common}
+					<button onClick={() => setDetail(country.name.common)}>Show details</button>
+				</div>
+			)}
 		</>
 	);
 }
