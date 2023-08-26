@@ -3,7 +3,7 @@ const app = express()
 
 const PORT = 3001;
 
-const persons = [
+let persons = [
 	{
 		"id": 1,
 		"name": "Arto Hellas", 
@@ -50,5 +50,15 @@ app.get("/api/persons/:id", (request, response) => {
 	if (person)
 		response.json(person);
 	else
+		response.status(404).end()
+});
+
+app.delete("/api/persons/:id", (request, response) => {
+	const id = Number(request.params.id);
+	const idIndex = persons.findIndex(person => person.id === id);
+	if(idIndex !== -1) {
+		persons.splice(idIndex, 1);
+		response.status(204).end()
+	} else
 		response.status(404).end()
 });
