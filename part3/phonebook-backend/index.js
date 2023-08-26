@@ -30,6 +30,13 @@ app.listen(PORT, () => {
 	console.log(`Server has started on port ${PORT}`);
 });
 
+app.get("/info", (request, response) => {
+	response.send(`
+		<p>Phonebook has info for ${persons.length} people</p>
+		<p>${new Date()}</p>
+	`);
+});
+
 app.get("/persons", (request, response) => {
 	console.log("request received!");
 	console.log(request);
