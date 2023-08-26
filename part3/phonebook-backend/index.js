@@ -42,3 +42,12 @@ app.get("/persons", (request, response) => {
 	console.log(request);
 	response.json(persons);
 });
+
+app.get("/persons/:id", (request, response) => {
+	const id = Number(request.params.id);
+	const person = persons.find(person => person.id === id);
+	if (person)
+		response.json(person);
+	else
+		response.status(404).end()
+});
