@@ -19,7 +19,8 @@
 	},
 	"homepage": "https://github.com/834N5/fso2023#readme",
 	"dependencies": {
-		"express": "^4.18.2"
+		"express": "^4.18.2",
+		"morgan": "^1.10.0"
 	},
 	"devDependencies": {
 		"nodemon": "^3.0.1"

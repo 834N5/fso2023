@@ -1,9 +1,11 @@
 const express = require("express")
+const morgan = require("morgan")
 const app = express()
 
 const PORT = 3001;
 
 app.use(express.json());
+app.use(morgan("tiny"));
 
 function generateID(arr)
 {
@@ -67,15 +69,15 @@ app.get("/api/persons/:id", (request, response) => {
 app.post("/api/persons", (request, response) => {
 	const id = generateID(persons.map(person => person.id));
 	const newPerson = {...request.body, id};
-	console.log(newPerson);
 	if (!newPerson.name || !newPerson.number) {
 		response.status(400).json({error: "parameter missing"});
 	} else if (persons.findIndex(person =>
 		person.name === newPerson.name) != -1) {
 		response.status(422).json({error: "name must be unique"});
-	} else
+	} else {
 		persons.push(newPerson);
 		response.json(newPerson);
+	}
 });
 
 app.delete("/api/persons/:id", (request, response) => {
