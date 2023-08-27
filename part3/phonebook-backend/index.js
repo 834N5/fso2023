@@ -5,7 +5,17 @@ const app = express()
 const PORT = 3001;
 
 app.use(express.json());
-app.use(morgan("tiny"));
+morgan.token("tinyData", (tokens, req, res) => {
+	return [
+		tokens.method(req, res),
+		tokens.url(req, res),
+		tokens.status(req, res),
+		tokens.res(req, res, "content-length"), "-",
+		tokens["response-time"](req, res), "ms",
+		JSON.stringify(req.body)
+	].join(" ");
+});
+app.use(morgan("tinyData"));
 
 function generateID(arr)
 {
