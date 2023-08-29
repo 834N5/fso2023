@@ -32,7 +32,6 @@ function Results({countries, query, detail, setDetail}) {
 					setWeather("Couldn't fetch weather");
 				});
 		}
-		console.log(weather);
 		return(
 			<>
 				<button onClick={() => {
