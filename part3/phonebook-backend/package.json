@@ -19,6 +19,7 @@
 	},
 	"homepage": "https://github.com/834N5/fso2023#readme",
 	"dependencies": {
+		"cors": "^2.8.5",
 		"express": "^4.18.2",
 		"morgan": "^1.10.0"
 	},
