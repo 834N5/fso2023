@@ -6,6 +6,7 @@ const app = express()
 const PORT = 3001;
 
 app.use(cors());
+app.use(express.static("../../part2/phonebook/build/"));
 app.use(express.json());
 morgan.token("tinyData", (tokens, req, res) => {
 	return [
