@@ -80,7 +80,6 @@ app.get("/info", (request, response) => {
 app.get("/api/persons", (request, response) => {
 	Person.find({}).then(result => {
 		response.json(result);
-		mongoose.connection.close();
 	});
 });
 
