@@ -1,9 +1,12 @@
-const express = require("express")
-const morgan = require("morgan")
-const cors = require("cors")
-const app = express()
+const cors = require("cors");
+const express = require("express");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
+const app = express();
+require("dotenv").config();
 
 const PORT = 3001;
+const dbUrl = process.env.MONGO_URL;
 
 app.use(cors());
 app.use(express.json());
@@ -19,6 +22,14 @@ morgan.token("tinyData", (tokens, req, res) => {
 });
 app.use(morgan("tinyData"));
 app.use(express.static("../../part2/phonebook/build/"));
+
+mongoose.connect(dbUrl);
+
+const phonebookSchema = new mongoose.Schema({
+        name: String,
+        number: String
+});
+const Person = mongoose.model("Person", phonebookSchema);
 
 function generateID(arr)
 {
@@ -67,7 +78,10 @@ app.get("/info", (request, response) => {
 
 /* api requests */
 app.get("/api/persons", (request, response) => {
-	response.json(persons);
+	Person.find({}).then(result => {
+		response.json(result);
+		mongoose.connection.close();
+	});
 });
 
 app.get("/api/persons/:id", (request, response) => {
