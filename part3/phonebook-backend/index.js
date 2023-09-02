@@ -23,8 +23,8 @@ morgan.token("tinyData", (tokens, req, res) => {
 app.use(morgan("tinyData"));
 app.use(express.static("../../part2/phonebook/build/"));
 
-mongoose.connect(dbUrl);
-
+mongoose.connect(dbUrl)
+.then(() => console.log("connected!"));
 const phonebookSchema = new mongoose.Schema({
         name: String,
         number: String
