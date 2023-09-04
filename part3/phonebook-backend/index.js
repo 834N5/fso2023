@@ -1,9 +1,10 @@
+require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const Person = require("./models/person");
 const app = express();
-require("dotenv").config();
 
 const PORT = 3001;
 const dbUrl = process.env.MONGO_URL;
@@ -23,12 +24,14 @@ morgan.token("tinyData", (tokens, req, res) => {
 app.use(morgan("tinyData"));
 app.use(express.static("../../part2/phonebook/build/"));
 
+/*
 mongoose.connect(dbUrl);
 const phonebookSchema = new mongoose.Schema({
         name: String,
         number: String
 });
 const Person = mongoose.model("Person", phonebookSchema);
+*/
 
 function generateID(arr)
 {
