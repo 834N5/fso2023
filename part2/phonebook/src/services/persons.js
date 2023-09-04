@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = "https://fso-phonebook-backend-lv99.onrender.com/api/persons";
+const url = "/api/persons";
 
 function getAll()
 {
