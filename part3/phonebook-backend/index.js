@@ -3,11 +3,11 @@ const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-const Person = require("./models/person");
 const app = express();
 
 const PORT = 3001;
 const dbUrl = process.env.MONGO_URL;
+const Person = require("./models/person");
 
 app.use(cors());
 app.use(express.json());
@@ -24,25 +24,6 @@ morgan.token("tinyData", (tokens, req, res) => {
 app.use(morgan("tinyData"));
 app.use(express.static("../../part2/phonebook/build/"));
 
-/*
-mongoose.connect(dbUrl);
-const phonebookSchema = new mongoose.Schema({
-        name: String,
-        number: String
-});
-const Person = mongoose.model("Person", phonebookSchema);
-*/
-
-function generateID(arr)
-{
-	for (let i = 0; i < arr.length; ++i)
-		while (arr[i] < arr.length && arr[i] > 0 && arr[i] !== i)
-			[ arr[arr[i]], arr[i] ] = [ arr[i], arr[arr[i]] ];
-	for (let i = 1; i < arr.length; ++i)
-		if (arr[i] !== i)
-			return(i);
-	return(arr.length+1);
-}
 
 const persons = [
 	{
@@ -95,16 +76,14 @@ app.get("/api/persons/:id", (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-	const id = generateID(persons.map(person => person.id));
-	const newPerson = {...request.body, id};
-	if (!newPerson.name || !newPerson.number) {
+	if (!request.body.name || !request.body.number) {
 		response.status(400).json({error: "parameter missing"});
-	} else if (persons.findIndex(person =>
-		person.name === newPerson.name) != -1) {
-		response.status(422).json({error: "name must be unique"});
 	} else {
-		persons.push(newPerson);
-		response.json(newPerson);
+		const person = new Person({...request.body});
+		console.log(person);
+		person.save().then(result => {
+			response.json(result);
+		});
 	}
 });
 
