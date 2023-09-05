@@ -60,10 +60,12 @@ app.get("/info", (request, response) => {
 });
 
 /* api requests */
-app.get("/api/persons", (request, response) => {
-	Person.find({}).then(result => {
+app.get("/api/persons", (request, response, next) => {
+	Person.find({})
+	.then(result => {
 		response.json(result);
-	});
+	})
+	.catch(error => next(error));
 });
 
 app.get("/api/persons/:id", (request, response) => {
@@ -86,13 +88,30 @@ app.post("/api/persons", (request, response) => {
 	}
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
 	Person.findByIdAndRemove(request.params.id)
 		.then(result => {
-			response.status(204).end();
+			if (result)
+				response.status(204).end();
+			else
+				response.status(404).end();
 		})
-		.catch(error => {
-			console.log(error);
-			response.status(404).end();
-		});
+		.catch(error => next(error));
 });
+
+function errorHandler(error, request, response, next)
+{
+	console.error(error.name);
+	console.error(error.message);
+	if (error.name === "CastError")
+		return response.status(400).json({error: "malformatted id"});
+	if (error.name === "MongooseError")
+		return response.status(500).end();
+	else {
+		console.log(error.name);
+		return response.status(500).end();
+	}
+
+	next(error);
+}
+app.use(errorHandler);
