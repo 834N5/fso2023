@@ -80,7 +80,6 @@ app.post("/api/persons", (request, response) => {
 		response.status(400).json({error: "parameter missing"});
 	} else {
 		const person = new Person({...request.body});
-		console.log(person);
 		person.save().then(result => {
 			response.json(result);
 		});
@@ -88,11 +87,12 @@ app.post("/api/persons", (request, response) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-	const id = Number(request.params.id);
-	const idIndex = persons.findIndex(person => person.id === id);
-	if(idIndex !== -1) {
-		persons.splice(idIndex, 1);
-		response.status(204).end();
-	} else
-		response.status(404).end();
+	Person.findByIdAndRemove(request.params.id)
+		.then(result => {
+			response.status(204).end();
+		})
+		.catch(error => {
+			console.log(error);
+			response.status(404).end();
+		});
 });
