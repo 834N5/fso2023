@@ -77,14 +77,35 @@ app.get("/api/persons/:id", (request, response) => {
 		response.status(404).end();
 });
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
 	if (!request.body.name || !request.body.number) {
 		response.status(400).json({error: "parameter missing"});
 	} else {
 		const person = new Person({...request.body});
-		person.save().then(result => {
-			response.json(result);
-		});
+		person.save()
+			.then(result => {
+				response.json(result);
+			})
+			.catch(error => next(error));
+	}
+});
+
+app.put("/api/persons/:id", (request, response, next) => {
+	if (!request.body.name || !request.body.number) {
+		response.status(400).json({error: "parameter missing"});
+	} else {
+		const person = {
+			name: request.body.name,
+			number: request.body.number
+		};
+		Person.findByIdAndUpdate(request.params.id, person, {new:true})
+			.then(result => {
+				if (result)
+					response.json(result)
+				else
+					response.status(404).end();
+			})
+			.catch(error => next(error));
 	}
 });
 
@@ -98,6 +119,7 @@ app.delete("/api/persons/:id", (request, response, next) => {
 		})
 		.catch(error => next(error));
 });
+
 
 function errorHandler(error, request, response, next)
 {
