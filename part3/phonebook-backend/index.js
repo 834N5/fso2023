@@ -68,13 +68,15 @@ app.get("/api/persons", (request, response, next) => {
 	.catch(error => next(error));
 });
 
-app.get("/api/persons/:id", (request, response) => {
-	const id = Number(request.params.id);
-	const person = persons.find(person => person.id === id);
-	if (person)
-		response.json(person);
-	else
-		response.status(404).end();
+app.get("/api/persons/:id", (request, response, next) => {
+	Person.findById(request.params.id)
+		.then(result => {
+			if (result)
+				response.json(result)
+			else
+				response.status(404).end();
+		})
+		.catch(error => next(error));
 });
 
 app.post("/api/persons", (request, response, next) => {
@@ -130,7 +132,6 @@ function errorHandler(error, request, response, next)
 	if (error.name === "MongooseError")
 		return response.status(500).end();
 	else {
-		console.log(error.name);
 		return response.status(500).end();
 	}
 
