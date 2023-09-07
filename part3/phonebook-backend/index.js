@@ -62,35 +62,31 @@ app.get("/api/persons/:id", (request, response, next) => {
 });
 
 app.post("/api/persons", (request, response, next) => {
-	if (!request.body.name || !request.body.number) {
-		response.status(400).json({error: "parameter missing"});
-	} else {
-		const person = new Person({...request.body});
-		person.save()
-			.then(result => {
-				response.json(result);
-			})
-			.catch(error => next(error));
-	}
+	const person = new Person({...request.body});
+	person.save()
+		.then(result => {
+			response.json(result);
+		})
+		.catch(error => next(error));
 });
 
 app.put("/api/persons/:id", (request, response, next) => {
-	if (!request.body.name || !request.body.number) {
-		response.status(400).json({error: "parameter missing"});
-	} else {
-		const person = {
-			name: request.body.name,
-			number: request.body.number
-		};
-		Person.findByIdAndUpdate(request.params.id, person, {new:true})
-			.then(result => {
-				if (result)
-					response.json(result)
-				else
-					response.status(404).end();
-			})
-			.catch(error => next(error));
-	}
+	const person = {
+		name: request.body.name,
+		number: request.body.number
+	};
+	Person.findByIdAndUpdate(
+		request.params.id,
+		person,
+		{new: true, runValidators: true, context: "query"}
+	)
+		.then(result => {
+			if (result)
+				response.json(result)
+			else
+				response.status(404).end();
+		})
+		.catch(error => next(error));
 });
 
 app.delete("/api/persons/:id", (request, response, next) => {
@@ -111,6 +107,8 @@ function errorHandler(error, request, response, next)
 	console.error(error.message);
 	if (error.name === "CastError")
 		return response.status(400).json({error: "malformatted id"});
+	if (error.name === "ValidationError")
+		return response.status(400).json({error: error.message});
 	if (error.name === "MongooseError")
 		return response.status(500).end();
 	else {

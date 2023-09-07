@@ -86,7 +86,10 @@ function App()
 					setNewNumber("");
 					addMessage(`${response.name} has been edited.`, "success");
 				})
-					.catch(() => addMessage(`${personsObj.name} could not be edited`, "error"));
+					.catch(error => {
+						console.log(error.response.data.error);
+						addMessage(`${personsObj.name} could not be edited`, "error")
+					});
 			}
 		}
 		else {
@@ -97,7 +100,8 @@ function App()
 				setNewNumber("");
 				addMessage(`${response.name} has been added.`, "success");
 			})
-			.catch(() => {
+			.catch(error => {
+				console.log(error.response.data.error);
 				addMessage("Name was unable to be added", "error");
 			});
 		}
