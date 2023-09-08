@@ -14,6 +14,12 @@ const phonebookSchema = new mongoose.Schema({
 	},
 	number: {
 		type: String,
+		minLength: 8,
+		validate: {
+			validator: value => {
+				return /^\d{2,3}-\d+$/.test(value);
+			}
+		},
 		required: true
 	},
 });
