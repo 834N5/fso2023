@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const dbUrl = process.env.MONGO_URL
+const dbUrl = process.env.MONGO_URL;
 
 if (!dbUrl) {
 	console.log("Mongodb url not found");
@@ -19,7 +19,7 @@ phonebookSchema.set("toJSON", {
 		delete returnedObject.__v;
 	}
 });
-const Person = mongoose.model("Person", phonebookSchema)
+const Person = mongoose.model("Person", phonebookSchema);
 
 if (process.argv.length === 2) {
 	Person.find({}).then(result => {
@@ -27,8 +27,8 @@ if (process.argv.length === 2) {
 		result.forEach(person => {
 			console.log(person.name, person.number);
 		});
-		mongoose.connection.close()
-	})
+		mongoose.connection.close();
+	});
 } else if (process.argv.length === 4) {
 	const person = new Person({
 		name: process.argv[2],
@@ -36,7 +36,11 @@ if (process.argv.length === 2) {
 	});
 
 	person.save().then(result => {
-		console.log(`Added "${result.name}", number: "${result.number}" to phonebook`);
+		console.log(
+			"Added " + result.name +
+			", number: " + result.number +
+			" to phonebook"
+		);
 		mongoose.connection.close();
 	});
 }

@@ -1,12 +1,10 @@
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
-const mongoose = require("mongoose");
 const morgan = require("morgan");
 const app = express();
 
 const PORT = 3001;
-const dbUrl = process.env.MONGO_URL;
 const Person = require("./models/person");
 
 
@@ -54,7 +52,7 @@ app.get("/api/persons/:id", (request, response, next) => {
 	Person.findById(request.params.id)
 		.then(result => {
 			if (result)
-				response.json(result)
+				response.json(result);
 			else
 				response.status(404).end();
 		})
@@ -82,7 +80,7 @@ app.put("/api/persons/:id", (request, response, next) => {
 	)
 		.then(result => {
 			if (result)
-				response.json(result)
+				response.json(result);
 			else
 				response.status(404).end();
 		})
@@ -101,7 +99,7 @@ app.delete("/api/persons/:id", (request, response, next) => {
 });
 
 
-function errorHandler(error, request, response, next)
+function errorHandler(error, request, response)
 {
 	console.error(error.name);
 	console.error(error.message);
@@ -114,7 +112,5 @@ function errorHandler(error, request, response, next)
 	else {
 		return response.status(500).end();
 	}
-
-	next(error);
 }
 app.use(errorHandler);
