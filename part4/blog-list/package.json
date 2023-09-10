@@ -1,0 +1,31 @@
+{
+	"name": "blog-list",
+	"version": "1.0.0",
+	"description": "really cool blog lister",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"dev": "nodemon index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/834N5/fso2023.git"
+	},
+	"author": "Joshua Lo",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/834N5/fso2023/issues"
+	},
+	"homepage": "https://github.com/834N5/fso2023#readme",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.3.1",
+		"express": "^4.18.2",
+		"mongoose": "^7.5.0"
+	},
+	"devDependencies": {
+		"eslint": "^8.49.0",
+		"nodemon": "^3.0.1"
+	}
+}
