@@ -6,4 +6,4 @@ const PORT = 3000;
 module.exports = {
 	MONGO_URL,
 	PORT
-}
+};
