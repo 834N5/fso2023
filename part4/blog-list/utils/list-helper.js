@@ -31,9 +31,26 @@ function mostBlogs(blogs) {
 	return topBlog;
 }
 
+function mostLikes(blogs) {
+	const topBlog = _.maxBy(
+		_.map(
+			_.groupBy(blogs, "author"),
+			author => {
+				return {
+					author: author[0].author,
+					likes: _.sumBy(author, "likes")
+				}
+			}
+		),
+		"likes"
+	);
+	return topBlog;
+}
+
 module.exports = {
 	dummy,
 	totalLikes,
 	favoriteBlog,
-	mostBlogs
+	mostBlogs,
+	mostLikes
 };
