@@ -41,3 +41,8 @@ test("api returns correct amount of blog posts", async () => {
 	const response = await api.get("/api/blogs");
 	expect(response.body).toHaveLength(initBlogs.length);
 });
+
+test("blog posts returned by api all have an id property", async () => {
+	const response = await api.get("/api/blogs");
+	response.body.forEach((blog) => expect(blog.id).toBeDefined());
+});
