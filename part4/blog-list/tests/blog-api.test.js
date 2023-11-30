@@ -46,3 +46,28 @@ test("blog posts returned by api all have an id property", async () => {
 	const response = await api.get("/api/blogs");
 	response.body.forEach((blog) => expect(blog.id).toBeDefined());
 });
+
+test("post request successfully creates a new blog post", async () => {
+	await api.post("/api/blogs").send(
+		{
+			"title": "green eggs and ham",
+			"author": "sam",
+			"url": "https://sam.com",
+			"likes": 2
+		}
+	);
+	const response = await api.get("/api/blogs");
+	expect(response.body).toHaveLength(initBlogs.length+1);
+	expect(response.body).toEqual(
+		expect.arrayContaining(
+			[expect.objectContaining(
+				{
+					"title": "green eggs and ham",
+					"author": "sam",
+					"url": "https://sam.com",
+					"likes": 2
+				}
+			)]
+		)
+	);
+});
