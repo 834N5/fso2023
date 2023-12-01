@@ -59,15 +59,26 @@ test("post request successfully creates a new blog post", async () => {
 	const response = await api.get("/api/blogs");
 	expect(response.body).toHaveLength(initBlogs.length+1);
 	expect(response.body).toEqual(
-		expect.arrayContaining(
-			[expect.objectContaining(
+		expect.arrayContaining([
+			expect.objectContaining(
 				{
 					"title": "green eggs and ham",
 					"author": "sam",
 					"url": "https://sam.com",
 					"likes": 2
 				}
-			)]
-		)
+			)
+		])
 	);
+});
+
+test("likes will default to 0 when excluded from request", async () => {
+	const response = await api.post("/api/blogs").send(
+		{
+			"title": "I LOVE CHEESEBURGER",
+			"author": "CHEESEBURGERLOVER223",
+			"url": "https://cheeseburger.com",
+		}
+	);
+	expect(response.body.likes).toBe(0);
 });
