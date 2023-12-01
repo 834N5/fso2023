@@ -4,7 +4,6 @@ const supertest = require("supertest");
 const app = require("../app");
 const api = supertest(app);
 
-//console.log(config.MONGO_URL);
 const initBlogs = [
 	{
 		"title": "a title",
@@ -77,8 +76,28 @@ test("likes will default to 0 when excluded from request", async () => {
 		{
 			"title": "I LOVE CHEESEBURGER",
 			"author": "CHEESEBURGERLOVER223",
-			"url": "https://cheeseburger.com",
+			"url": "https://cheeseburger.com"
 		}
 	);
 	expect(response.body.likes).toBe(0);
 });
+
+test("api returns 400 when title or url are missing", async () => {
+	const response1 = await api.post("/api/blogs").send(
+		{
+			"author": "CHEESEBURGERLOVER223",
+			"url": "https://cheeseburger.com",
+			likes: 3
+		}
+	);
+	expect(response1.statusCode).toBe(400);
+
+	const response2 = await api.post("/api/blogs").send(
+		{
+			"title": "I LOVE CHEESEBURGER",
+			"author": "CHEESEBURGERLOVER223",
+			likes: 3
+		}
+	);
+	expect(response1.statusCode).toBe(400);
+}, 10000);
