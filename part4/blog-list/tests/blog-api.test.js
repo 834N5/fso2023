@@ -102,5 +102,20 @@ describe("POSTing blogs", () => {
 			}
 		);
 		expect(response1.statusCode).toBe(400);
-	}, 10000);
+	});
+});
+
+describe("DELETEing blogs", () => {
+	test("delete blog", async () => {
+		const id = (await api.get("/api/blogs")).body[0].id;
+		await api.delete(`/api/blogs/${id}`);
+		const response = await api.get("/api/blogs");
+
+		expect(response.body).toHaveLength(initBlogs.length-1);
+		expect(response.body).toEqual(
+			expect.arrayContaining([
+				expect.not.objectContaining({ "id": id })
+			])
+		);
+	});
 });
