@@ -1,1 +1,1 @@
-curl 'http://127.0.0.1:3000/api/blogs'
+curl -v 'http://127.0.0.1:3000/api/blogs'
