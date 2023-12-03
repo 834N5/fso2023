@@ -36,68 +36,71 @@ beforeEach(async () => {
 	await Blog.insertMany(initBlogs);
 });
 
-test("api returns correct amount of blog posts", async () => {
-	const response = await api.get("/api/blogs");
-	expect(response.body).toHaveLength(initBlogs.length);
+describe("GETing blogs", () => {
+	test("api returns correct amount of blog posts", async () => {
+		const response = await api.get("/api/blogs");
+		expect(response.body).toHaveLength(initBlogs.length);
+	});
+
+	test("blog posts returned by api have an id property", async () => {
+		const response = await api.get("/api/blogs");
+		response.body.forEach((blog) => expect(blog.id).toBeDefined());
+	});
 });
+describe("POSTing blogs", () => {
+	test("post request successfully creates a new blog post", async () => {
+		await api.post("/api/blogs").send(
+			{
+				"title": "green eggs and ham",
+				"author": "sam",
+				"url": "https://sam.com",
+				"likes": 2
+			}
+		);
+		const response = await api.get("/api/blogs");
+		expect(response.body).toHaveLength(initBlogs.length+1);
+		expect(response.body).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining(
+					{
+						"title": "green eggs and ham",
+						"author": "sam",
+						"url": "https://sam.com",
+						"likes": 2
+					}
+				)
+			])
+		);
+	});
 
-test("blog posts returned by api all have an id property", async () => {
-	const response = await api.get("/api/blogs");
-	response.body.forEach((blog) => expect(blog.id).toBeDefined());
+	test("likes default to 0 when excluded from request", async () => {
+		const response = await api.post("/api/blogs").send(
+			{
+				"title": "I LOVE CHEESEBURGER",
+				"author": "CHEESEBURGERLOVER223",
+				"url": "https://cheeseburger.com"
+			}
+		);
+		expect(response.body.likes).toBe(0);
+	});
+
+	test("api returns 400 when title or url are missing", async () => {
+		const response1 = await api.post("/api/blogs").send(
+			{
+				"author": "CHEESEBURGERLOVER223",
+				"url": "https://cheeseburger.com",
+				likes: 3
+			}
+		);
+		expect(response1.statusCode).toBe(400);
+
+		const response2 = await api.post("/api/blogs").send(
+			{
+				"title": "I LOVE CHEESEBURGER",
+				"author": "CHEESEBURGERLOVER223",
+				likes: 3
+			}
+		);
+		expect(response1.statusCode).toBe(400);
+	}, 10000);
 });
-
-test("post request successfully creates a new blog post", async () => {
-	await api.post("/api/blogs").send(
-		{
-			"title": "green eggs and ham",
-			"author": "sam",
-			"url": "https://sam.com",
-			"likes": 2
-		}
-	);
-	const response = await api.get("/api/blogs");
-	expect(response.body).toHaveLength(initBlogs.length+1);
-	expect(response.body).toEqual(
-		expect.arrayContaining([
-			expect.objectContaining(
-				{
-					"title": "green eggs and ham",
-					"author": "sam",
-					"url": "https://sam.com",
-					"likes": 2
-				}
-			)
-		])
-	);
-});
-
-test("likes will default to 0 when excluded from request", async () => {
-	const response = await api.post("/api/blogs").send(
-		{
-			"title": "I LOVE CHEESEBURGER",
-			"author": "CHEESEBURGERLOVER223",
-			"url": "https://cheeseburger.com"
-		}
-	);
-	expect(response.body.likes).toBe(0);
-});
-
-test("api returns 400 when title or url are missing", async () => {
-	const response1 = await api.post("/api/blogs").send(
-		{
-			"author": "CHEESEBURGERLOVER223",
-			"url": "https://cheeseburger.com",
-			likes: 3
-		}
-	);
-	expect(response1.statusCode).toBe(400);
-
-	const response2 = await api.post("/api/blogs").send(
-		{
-			"title": "I LOVE CHEESEBURGER",
-			"author": "CHEESEBURGERLOVER223",
-			likes: 3
-		}
-	);
-	expect(response1.statusCode).toBe(400);
-}, 10000);
