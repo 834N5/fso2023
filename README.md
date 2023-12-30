@@ -1,4 +1,4 @@
 # fso2023
 Full Stack Open 2023
 
-[URL for your convenience](https://fullstackopen.com/en/)
+[URL for your convenience](https://fullstackopen.com/en/part4/token_authentication)
