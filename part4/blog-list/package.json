@@ -20,6 +20,7 @@
 	},
 	"homepage": "https://github.com/834N5/fso2023#readme",
 	"dependencies": {
+		"bcrypt": "^5.1.1",
 		"cors": "^2.8.5",
 		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
