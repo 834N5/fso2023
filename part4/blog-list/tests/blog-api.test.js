@@ -6,28 +6,28 @@ const api = supertest(app);
 
 const initBlogs = [
 	{
-		"title": "a title",
-		"author": "an author",
-		"url": "https://nothing.com",
-		"likes": 39
+		title: "a title",
+		author: "an author",
+		url: "https://nothing.com",
+		likes: 39
 	},
 	{
-		"title": "another title",
-		"author": "anon",
-		"url": "https://something.com",
-		"likes": 59
+		title: "another title",
+		author: "anon",
+		url: "https://something.com",
+		likes: 59
 	},
 	{
-		"title": "not a title",
-		"author": "author",
-		"url": "https://arstneio.com",
-		"likes": 9
+		title: "not a title",
+		author: "author",
+		url: "https://arstneio.com",
+		likes: 9
 	},
 	{
-		"title": "BIG TITS",
-		"author": "arthur",
-		"url": "https://example.com",
-		"likes": 1
+		title: "BIG TITS",
+		author: "arthur",
+		url: "https://example.com",
+		likes: 1
 	}
 ];
 
@@ -51,10 +51,10 @@ describe("POSTing blogs", () => {
 	test("post request successfully creates a new blog post", async () => {
 		await api.post("/api/blogs").send(
 			{
-				"title": "green eggs and ham",
-				"author": "sam",
-				"url": "https://sam.com",
-				"likes": 2
+				title: "green eggs and ham",
+				author: "sam",
+				url: "https://sam.com",
+				likes: 2
 			}
 		);
 		const response = await api.get("/api/blogs");
@@ -63,10 +63,10 @@ describe("POSTing blogs", () => {
 			expect.arrayContaining([
 				expect.objectContaining(
 					{
-						"title": "green eggs and ham",
-						"author": "sam",
-						"url": "https://sam.com",
-						"likes": 2
+						title: "green eggs and ham",
+						author: "sam",
+						url: "https://sam.com",
+						likes: 2
 					}
 				)
 			])
@@ -76,9 +76,9 @@ describe("POSTing blogs", () => {
 	test("likes default to 0 when excluded from request", async () => {
 		const response = await api.post("/api/blogs").send(
 			{
-				"title": "I LOVE CHEESEBURGER",
-				"author": "CHEESEBURGERLOVER223",
-				"url": "https://cheeseburger.com"
+				title: "I LOVE CHEESEBURGER",
+				author: "CHEESEBURGERLOVER223",
+				url: "https://cheeseburger.com"
 			}
 		);
 		expect(response.body.likes).toBe(0);
@@ -87,8 +87,8 @@ describe("POSTing blogs", () => {
 	test("api returns 400 when title or url are missing", async () => {
 		const response1 = await api.post("/api/blogs").send(
 			{
-				"author": "CHEESEBURGERLOVER223",
-				"url": "https://cheeseburger.com",
+				author: "CHEESEBURGERLOVER223",
+				url: "https://cheeseburger.com",
 				likes: 3
 			}
 		);
@@ -96,8 +96,8 @@ describe("POSTing blogs", () => {
 
 		const response2 = await api.post("/api/blogs").send(
 			{
-				"title": "I LOVE CHEESEBURGER",
-				"author": "CHEESEBURGERLOVER223",
+				title: "I LOVE CHEESEBURGER",
+				author: "CHEESEBURGERLOVER223",
 				likes: 3
 			}
 		);
@@ -114,7 +114,7 @@ describe("DELETEing blogs", () => {
 		expect(response.body).toHaveLength(initBlogs.length-1);
 		expect(response.body).toEqual(
 			expect.arrayContaining([
-				expect.not.objectContaining({ "id": id })
+				expect.not.objectContaining({ id: id })
 			])
 		);
 	});
