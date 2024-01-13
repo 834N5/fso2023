@@ -17,7 +17,6 @@ blogRouter.post("/", async (request, response, next) => {
 
 	try {
 		const result = await blog.save();
-		console.log(result);
 		await User.findByIdAndUpdate(
 			users[0]._id,
 			{$push: {blogs: result._id}},
