@@ -3,7 +3,10 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 
 blogRouter.get("/", async (request, response, next) => {
-	const blogs = await Blog.find({}).populate("user");
+	const blogs = await Blog.find({}).populate(
+		"user",
+		["username", "name"]
+	);
 	response.json(blogs);
 });
 
@@ -14,6 +17,12 @@ blogRouter.post("/", async (request, response, next) => {
 
 	try {
 		const result = await blog.save();
+		console.log(result);
+		await User.findByIdAndUpdate(
+			users[0]._id,
+			{$push: {blogs: result._id}},
+			{new: true, runValidators: true, context: "query"}
+		);
 		response.status(201).json(result);
 	} catch(exception) {
 		next(exception);
