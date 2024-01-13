@@ -1,7 +1,9 @@
 const config = require("../utils/config");
 const Blog = require("../models/blog");
+const User = require("../models/user");
 const supertest = require("supertest");
 const app = require("../app");
+const mongoose = require("mongoose");
 const api = supertest(app);
 
 const initBlogs = [
@@ -31,10 +33,21 @@ const initBlogs = [
 	}
 ];
 
+beforeAll(async () => {
+	await User.deleteMany({});
+	await api.post("/api/users").send(
+		{
+			username: "AzureDiamond",
+			name: "hunter",
+			password: "hunter2"
+		}
+	);
+}, 10000);
+
 beforeEach(async () => {
 	await Blog.deleteMany({});
 	await Blog.insertMany(initBlogs);
-});
+}, 10000);
 
 describe("GETing blogs", () => {
 	test("api returns correct amount of blog posts", async () => {
@@ -118,4 +131,8 @@ describe("DELETEing blogs", () => {
 			])
 		);
 	});
+});
+
+afterAll(async () => {
+	await mongoose.connection.close()
 });
