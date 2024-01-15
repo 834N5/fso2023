@@ -1,6 +1,8 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const config = require("../utils/config");
 
 blogRouter.get("/", async (request, response, next) => {
 	const blogs = await Blog.find({}).populate(
@@ -13,12 +15,21 @@ blogRouter.get("/", async (request, response, next) => {
 blogRouter.post("/", async (request, response, next) => {
 	const { title, author, url, likes } = request.body;
 	const users = await User.aggregate([{$sample: {size: 1}}]);
-	const blog = new Blog({ title, author, url, likes, user: users[0]._id});
+	const blog = new Blog({title, author, url, likes, user: users[0]._id});
+
+	const token = request.get("Authorization").replace("Bearer ", "");
 
 	try {
+		const {username, id} = jwt.verify(token, config.SECRET);
+		const tokenUsername = await User.findById(id, "username");
+		if (username !== tokenUsername.username) {
+			response.status(401).json({error: "invalid token"});
+			return;
+		}
+
 		const result = await blog.save();
 		await User.findByIdAndUpdate(
-			users[0]._id,
+			id,
 			{$push: {blogs: result._id}},
 			{new: true, runValidators: true, context: "query"}
 		);
