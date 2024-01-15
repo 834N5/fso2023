@@ -17,10 +17,10 @@ blogRouter.post("/", async (request, response, next) => {
 	const users = await User.aggregate([{$sample: {size: 1}}]);
 	const blog = new Blog({title, author, url, likes, user: users[0]._id});
 
-	const token = request.get("Authorization").replace("Bearer ", "");
+	//const token = request.get("Authorization").replace("Bearer ", "");
 
 	try {
-		const {username, id} = jwt.verify(token, config.SECRET);
+		const {username, id} = jwt.verify(request.token, config.SECRET);
 		const tokenUsername = await User.findById(id, "username");
 		if (username !== tokenUsername.username) {
 			response.status(401).json({error: "invalid token"});

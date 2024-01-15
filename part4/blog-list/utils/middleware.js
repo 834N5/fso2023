@@ -17,8 +17,20 @@ function errorHandler(error, request, response, next)
 		default:
 			return response.status(500).end();
 	}
+
+	next(error);
+}
+
+function tokenExtractor(request, response, next)
+{
+	const token = request.get("Authorization");
+	if (token && token.startsWith("Bearer ")) {
+		request.token = token.replace("Bearer ", "");
+	}
+	next();
 }
 
 module.exports = {
-	errorHandler
+	errorHandler,
+	tokenExtractor
 };
