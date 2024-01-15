@@ -15,9 +15,10 @@ userRouter.post("/", async (request, response, next) => {
 	const saltRounds = 10;
 	try {
 		if (!password) {
-			return response.status(400).json(
+			response.status(400).json(
 				{ error: "Path `password` is required." }
 			);
+			return;
 		}
 		if (password.length < 3) {
 			return response.status(400).json(
