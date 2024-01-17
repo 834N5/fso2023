@@ -39,7 +39,7 @@ function mostLikes(blogs) {
 				return {
 					author: author[0].author,
 					likes: _.sumBy(author, "likes")
-				}
+				};
 			}
 		),
 		"likes"

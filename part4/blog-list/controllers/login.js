@@ -5,20 +5,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 loginRouter.post("/", async (request, response, next) => {
-	const { username, password } = request.body;
+	const {username, password} = request.body;
 
 	try {
 		const user = await User.findOne({username});
 
 		if (!password) {
 			response.status(400).json(
-				{ error: "Path `password` is required." }
+				{error: "Path `password` is required."}
 			);
 			return;
 		}
 		if (!username) {
 			response.status(400).json(
-				{ error: "Path `username` is required." }
+				{error: "Path `username` is required."}
 			);
 			return;
 		}

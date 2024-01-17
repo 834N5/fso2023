@@ -1,4 +1,3 @@
-const config = require("../utils/config");
 const Blog = require("../models/blog");
 const User = require("../models/user");
 const supertest = require("supertest");
@@ -114,7 +113,7 @@ describe("POSTing blogs", () => {
 				likes: 3
 			}
 		);
-		expect(response1.statusCode).toBe(400);
+		expect(response2.statusCode).toBe(400);
 	});
 });
 
@@ -127,8 +126,8 @@ describe("DELETEing blogs", () => {
 		expect(response.body).toHaveLength(initBlogs.length-1);
 		expect(response.body).toEqual(
 			expect.arrayContaining([
-				expect.not.objectContaining({ id: id })
-			])
+				expect.not.objectContaining({id: id})
+			]);
 		);
 	});
 });

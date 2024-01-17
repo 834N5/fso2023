@@ -13,11 +13,9 @@ blogRouter.get("/", async (request, response, next) => {
 });
 
 blogRouter.post("/", async (request, response, next) => {
-	const { title, author, url, likes } = request.body;
+	const {title, author, url, likes} = request.body;
 	const users = await User.aggregate([{$sample: {size: 1}}]);
 	const blog = new Blog({title, author, url, likes, user: users[0]._id});
-
-	//const token = request.get("Authorization").replace("Bearer ", "");
 
 	try {
 		const {username, id} = jwt.verify(request.token, config.SECRET);
@@ -42,10 +40,11 @@ blogRouter.post("/", async (request, response, next) => {
 blogRouter.delete("/:id", async (request, response, next) => {
 	try {
 		const result = await Blog.findByIdAndRemove(request.params.id);
-		if (result)
+		if (result) {
 			response.status(204).end();
-		else
+		} else {
 			response.status(404).end();
+		}
 	} catch(exception) {
 		next(exception);
 	}
@@ -60,10 +59,11 @@ blogRouter.put("/:id", async (request, response, next) => {
 			blog,
 			{new: true, runValidators: true, context: "query"}
 		);
-		if (result)
+		if (result) {
 			response.status(200).json(result);
-		else
+		} else {
 			response.status(404).end();
+		}
 	} catch(exception) {
 		next(exception);
 	}

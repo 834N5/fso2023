@@ -9,16 +9,12 @@ function errorHandler(error, request, response, next)
 		case "ValidationError":
 		case "TypeError":
 			return response.status(400).json({error: error.message});
-			break;
 		case "JsonWebTokenError":
 		case "TokenExpiredError":
 			return response.status(401).json({error: error.message});
-			break;
 		default:
 			return response.status(500).end();
 	}
-
-	next(error);
 }
 
 function tokenExtractor(request, response, next)
