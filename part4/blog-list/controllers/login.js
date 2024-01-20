@@ -30,7 +30,7 @@ loginRouter.post("/", async (request, response, next) => {
 		);
 		if(user && passwordCorrect) {
 			const token = jwt.sign(
-				{username: username, id: user._id},
+				{id: user._id},
 				config.SECRET,
 				{expiresIn: "1h"}
 			);
