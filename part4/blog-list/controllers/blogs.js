@@ -14,20 +14,15 @@ blogRouter.get("/", async (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
 	const {title, author, url, likes} = request.body;
-	const users = await User.aggregate([{$sample: {size: 1}}]);
-	const blog = new Blog({title, author, url, likes, user: users[0]._id});
 
 	try {
-		const {username, id} = jwt.verify(request.token, config.SECRET);
-		const tokenUsername = await User.findById(id, "username");
-		if (username !== tokenUsername.username) {
-			response.status(401).json({error: "invalid token"});
-			return;
-		}
+		const token = jwt.verify(request.token, config.SECRET);
+		const id = await User.findById(token.id, "id");
+		const blog = new Blog({title, author, url, likes, user: id});
 
 		const result = await blog.save();
 		await User.findByIdAndUpdate(
-			id,
+			token.id,
 			{$push: {blogs: result._id}},
 			{new: true, runValidators: true, context: "query"}
 		);
@@ -39,15 +34,10 @@ blogRouter.post("/", async (request, response, next) => {
 
 blogRouter.delete("/:id", async (request, response, next) => {
 	try {
-		const {username, id} = jwt.verify(request.token, config.SECRET);
-		const tokenUsername = await User.findById(id, "username");
-		if (username !== tokenUsername.username) {
-			response.status(401).json({error: "invalid token"});
-			return;
-		}
+		const token = jwt.verify(request.token, config.SECRET);
 
 		const blogUserID = await Blog.findById(request.params.id, "user");
-		if (id !== blogUserID.user.toString()) {
+		if (token.id !== blogUserID.user.toString()) {
 			response.status(401).json({error: "not authorized"});
 			return;
 		}
@@ -55,7 +45,7 @@ blogRouter.delete("/:id", async (request, response, next) => {
 		const result = await Blog.findByIdAndDelete(request.params.id);
 		if (result) {
 			await User.findByIdAndUpdate(
-				id,
+				token.id,
 				{$pull: {blogs: request.params.id}},
 				{new: true, runValidators: true, context: "query"}
 			);
