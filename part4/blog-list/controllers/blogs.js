@@ -17,7 +17,7 @@ blogRouter.post("/", async (request, response, next) => {
 
 	try {
 		const token = jwt.verify(request.token, config.SECRET);
-		const id = await User.findById(token.id, "id");
+		const id = (await User.findById(token.id, "_id"))._id;
 		const blog = new Blog({title, author, url, likes, user: id});
 
 		const result = await blog.save();
@@ -36,8 +36,8 @@ blogRouter.delete("/:id", async (request, response, next) => {
 	try {
 		const token = jwt.verify(request.token, config.SECRET);
 
-		const blogUserID = await Blog.findById(request.params.id, "user");
-		if (token.id !== blogUserID.user.toString()) {
+		const blogUserID = (await Blog.findById(request.params.id, "user")).user.toString();
+		if (token.id !== blogUserID) {
 			response.status(401).json({error: "not authorized"});
 			return;
 		}
