@@ -32,18 +32,26 @@ const initBlogs = [
 	}
 ];
 
-beforeAll(async () => {
+let token;
+
+beforeEach(async () => {
 	await User.deleteMany({});
-	await api.post("/api/users").send(
+	const user = await api.post("/api/users").send(
 		{
 			username: "AzureDiamond",
 			name: "hunter",
 			password: "hunter2"
 		}
 	);
-}, 10000);
-
-beforeEach(async () => {
+	const login = await api.post("/api/login").send(
+		{
+			username: "AzureDiamond",
+			password: "hunter2"
+		}
+	);
+	token = "Bearer " + login.body.token;
+	const mongooseObjectId = (await User.findById(user.body.id))._id;
+	initBlogs.forEach(blog => blog.user = mongooseObjectId);
 	await Blog.deleteMany({});
 	await Blog.insertMany(initBlogs);
 }, 10000);
@@ -68,7 +76,7 @@ describe("POSTing blogs", () => {
 				url: "https://sam.com",
 				likes: 2
 			}
-		);
+		).set("Authorization", token);
 		const response = await api.get("/api/blogs");
 		expect(response.body).toHaveLength(initBlogs.length+1);
 		expect(response.body).toEqual(
@@ -92,7 +100,7 @@ describe("POSTing blogs", () => {
 				author: "CHEESEBURGERLOVER223",
 				url: "https://cheeseburger.com"
 			}
-		);
+		).set("Authorization", token);
 		expect(response.body.likes).toBe(0);
 	});
 
@@ -103,7 +111,7 @@ describe("POSTing blogs", () => {
 				url: "https://cheeseburger.com",
 				likes: 3
 			}
-		);
+		).set("Authorization", token);
 		expect(response1.statusCode).toBe(400);
 
 		const response2 = await api.post("/api/blogs").send(
@@ -112,7 +120,7 @@ describe("POSTing blogs", () => {
 				author: "CHEESEBURGERLOVER223",
 				likes: 3
 			}
-		);
+		).set("Authorization", token);
 		expect(response2.statusCode).toBe(400);
 	});
 });
@@ -120,14 +128,14 @@ describe("POSTing blogs", () => {
 describe("DELETEing blogs", () => {
 	test("delete blog", async () => {
 		const id = (await api.get("/api/blogs")).body[0].id;
-		await api.delete(`/api/blogs/${id}`);
+		await api.delete(`/api/blogs/${id}`).set("Authorization", token);
 		const response = await api.get("/api/blogs");
 
 		expect(response.body).toHaveLength(initBlogs.length-1);
 		expect(response.body).toEqual(
 			expect.arrayContaining([
 				expect.not.objectContaining({id: id})
-			]);
+			])
 		);
 	});
 });
