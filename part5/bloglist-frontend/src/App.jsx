@@ -17,9 +17,15 @@ const App = () => {
 
 	const handleLogin = (event) => {
 		event.preventDefault()
-		loginService.login({username, password}).then(response =>
+		loginService.login({username, password}).then(response => {
 			setUser(response)
-		)
+			setUsername("")
+			setPassword("")
+		})
+	}
+
+	const handleLogout = () => {
+		setUser(null);
 	}
 
 	/* delete later */
@@ -32,7 +38,10 @@ const App = () => {
 		return (
 			<div>
 				<h2>blogs</h2>
-				<p><b>{user.name}</b> is logged in</p>
+				<p>
+					<b>{user.name}</b> is logged in
+					<button onClick={handleLogout}>logout</button>
+				</p>
 				{blogs.map(blog =>
 					<Blog key={blog.id} blog={blog} />
 				)}
