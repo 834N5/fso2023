@@ -34,7 +34,11 @@ loginRouter.post("/", async (request, response, next) => {
 				config.SECRET,
 				{expiresIn: "1h"}
 			);
-			response.status(200).json({username, token});
+			response.status(200).json({
+				username: username,
+				name: user.name,
+				token: token
+			});
 		} else {
 			response.status(401).json(
 				{error: "invalid username or password"}
