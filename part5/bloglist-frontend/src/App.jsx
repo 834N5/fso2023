@@ -13,6 +13,7 @@ const App = () => {
 	const [url, setUrl] = useState("")
 
 	useEffect(() => {
+		setUser(JSON.parse(window.localStorage.getItem("loggedInUser")))
 		blogService.getAll().then(blogs =>
 			setBlogs( blogs )
 		)
@@ -36,6 +37,7 @@ const App = () => {
 	const handleBlogCreation = (event) => {
 		event.preventDefault()
 		blogService.create({title, author, url}, user.token).then(response => {
+			console.log(response)
 			setBlogs(blogs.concat(response))
 			setTitle("")
 			setAuthor("")
@@ -109,6 +111,7 @@ const App = () => {
 					<input
 						type="text"
 						name="username"
+						value={username}
 						onChange={({target}) => setUsername(target.value)}
 					/>
 				</div>
@@ -117,6 +120,7 @@ const App = () => {
 					<input
 						type="password"
 						name="password"
+						value={password}
 						onChange={({target}) => setPassword(target.value)}
 					/>
 				</div>
