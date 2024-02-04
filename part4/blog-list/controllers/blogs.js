@@ -18,15 +18,19 @@ blogRouter.post("/", async (request, response, next) => {
 	try {
 		const token = jwt.verify(request.token, config.SECRET);
 		const id = (await User.findById(token.id, "_id"))._id;
-		const blog = new Blog({title, author, url, likes, user: id});
-
-		const result = await blog.save();
+		const result = await Blog.create(
+			{title, author, url, likes, user: id}
+		);
+		const populatedResult = await result.populate(
+			"user",
+			["username", "name"]
+		);
 		await User.findByIdAndUpdate(
 			token.id,
 			{$push: {blogs: result._id}},
 			{new: true, runValidators: true, context: "query"}
 		);
-		response.status(201).json(result);
+		response.status(201).json(populatedResult);
 	} catch(exception) {
 		next(exception);
 	}
