@@ -26,9 +26,8 @@ userRouter.post("/", async (request, response, next) => {
 			);
 		}
 		const passwordHash = await bcrypt.hash(password, saltRounds);
-		const user = new User({username, name, passwordHash});
 
-		const result = await user.save();
+		const result = await User.create({username, name, passwordHash});
 		response.status(201).json(result);
 	} catch(exception) {
 		next(exception);
