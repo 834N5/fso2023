@@ -21,6 +21,7 @@ const App = () => {
 	const handleLogin = (event) => {
 		event.preventDefault()
 		loginService.login({username, password}).then(response => {
+			window.localStorage.setItem("loggedInUser", JSON.stringify(response))
 			setUser(response)
 			setUsername("")
 			setPassword("")
@@ -29,6 +30,7 @@ const App = () => {
 
 	const handleLogout = () => {
 		setUser(null);
+		window.localStorage.removeItem("loggedInUser")
 	}
 
 	const handleBlogCreation = (event) => {
