@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,6 +12,9 @@ const App = () => {
 	const [title, setTitle] = useState("")
 	const [author, setAuthor] = useState("")
 	const [url, setUrl] = useState("")
+	const [messages, setMessages] = useState([])
+	//fix
+
 
 	useEffect(() => {
 		setUser(JSON.parse(window.localStorage.getItem("loggedInUser")))
@@ -49,15 +53,32 @@ const App = () => {
 		})
 	}
 
+	const addMessage = (message, type) => {
+		let keys = (messages.map(messages => messages.key))
+		let key = 0;
+		for (let i = 0; i < keys.length; ++i)
+			while(keys[i] < keys.length && keys[i] !== i)
+				[ keys[keys[i]], keys[i] ] = [ keys[i], keys[keys[i]] ]
+		for (key = 0; key < keys.length; ++key)
+			if (keys[key] !== key)
+				break
+
+		setMessages(messages => [...messages, {message, type, key}])
+		setTimeout(() => {setMessages(messages => messages.slice(1))}, 5000)
+	}
+
 	/* delete later */
 	const testShitPls = (event) => {
 		console.log(event)
+		addMessage(key, "success")
 	}
 	// <button onClick={testShitPls}>test</button>
 
 	if (user) {
 		return (
 			<div>
+				<button onClick={testShitPls}>test</button>
+				<Notification messages={messages} />
 				<h2>blogs</h2>
 				<p>
 					<b>{user.name}</b> is logged in
@@ -104,6 +125,8 @@ const App = () => {
 	}
 	return (
 		<div>
+			<button onClick={testShitPls}>test</button>
+			<Notification messages={messages} />
 			<h2>login</h2>
 			<form onSubmit={handleLogin}>
 				<div>
