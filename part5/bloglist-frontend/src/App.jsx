@@ -70,7 +70,7 @@ const App = () => {
 	/* delete later */
 	const testShitPls = (event) => {
 		console.log(event)
-		addMessage(key, "success")
+		addMessage("something", "success")
 	}
 	// <button onClick={testShitPls}>test</button>
 
