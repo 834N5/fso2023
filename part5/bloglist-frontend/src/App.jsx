@@ -54,6 +54,7 @@ const App = () => {
 	}
 
 	const addMessage = (message, type) => {
+		/* Get lowest missing positive int */
 		let keys = (messages.map(messages => messages.key))
 		let key = 0;
 		for (let i = 0; i < keys.length; ++i)
