@@ -28,8 +28,12 @@ const App = () => {
 		loginService.login({username, password}).then(response => {
 			window.localStorage.setItem("loggedInUser", JSON.stringify(response))
 			setUser(response)
+			console.log(response)
+			addMessage(`Welcome ${response.name}`, "success")
 			setUsername("")
 			setPassword("")
+		}).catch(() => {
+			addMessage("Invalid credentials", "error")
 		})
 	}
 
@@ -41,18 +45,23 @@ const App = () => {
 	const handleBlogCreation = (event) => {
 		event.preventDefault()
 		blogService.create({title, author, url}, user.token).then(response => {
-			console.log(response)
+			addMessage("blog created", "success")
 			setBlogs(blogs.concat(response))
 			setTitle("")
 			setAuthor("")
 			setUrl("")
-		}).catch(() => {
+		}).catch(error => {
+			if (error.response.status == 400)
+				addMessage("Failed to add blogs", "error")
+			else
+				addMessage("Failed to add blog", "error")
 			setTitle("")
 			setAuthor("")
 			setUrl("")
 		})
 	}
 
+	// type = success, error
 	const addMessage = (message, type) => {
 		/* Get lowest missing positive int */
 		let keys = (messages.map(messages => messages.key))
